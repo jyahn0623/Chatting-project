@@ -1,0 +1,47 @@
+<html>
+<head>
+    <title>Welcome To JY Chatting!</title>
+     <script
+        src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous"></script>
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <style>
+        div{
+            cursor : pointer;
+        }
+    </style>
+</head> 
+<body>
+    <div class="container">
+        <div class="row">
+            <div class='col-md-12 text-center'>
+                <div class='section col-md-4 alert alert-danger' data-channel="dev">
+                    개발
+                </div>
+                <div class='section col-md-4 alert alert-success' data-channel="des">
+                    디자인
+                </div>
+                <div class='section col-md-4 alert alert-info' data-channel="mar">
+                    기획
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        $(".section").on("click", function(i){
+           let type = $(this).data('channel');
+           window.location.href = "/chat?channel=" + type;
+        })
+    </script>
+</body>
+</html>

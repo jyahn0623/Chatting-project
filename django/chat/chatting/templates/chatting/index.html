@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Channel - {{channel}}</title>
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous"></script>
+    <script src="http://localhost:3001/socket.io/socket.io.js"></script>
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <h1>{{channel}} 채널</h1>
+            <div class="col-md-8">  
+                <div class="message-section alert alert-info" style="height : 800px; overflow-y : scroll;">
+                </div>
+                <div class="section-foot" style="">
+                        <span>이름 : <input id="name"></span>
+                        <span>메시지 : <input id="message"></span>
+                        <input type="button" value="전송" onclick="sendMessage();">
+                        
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="users text-center">
+                    <h3>접속자</h3>
+                </div>
+                <div class="user-section alert alert-danger" style="height : 745px;">
+
+                </div>
+            </div>
+        </div>  
+    </div>
+   
+
+    
+    <script>
+        var socket = io("http://localhost:3001/");
+        
+        socket.on("message", (data)=>{
+            // 데이터 수신 시
+            console.log(data.users);
+            readMessage(data);
+        })
+
+        socket.on("init", (data)=>{
+            readMessage(data);
+            $(".user-section").empty();
+            data.users.map( i => {
+                $(".user-section").append(`
+                        <div>${i}</div>
+                    `)
+            })
+        })
+
+        socket.emit("getMessage", {
+            channel : "{{channel}}",
+            
+        })
+
+
+
+        function sendMessage(){
+            var name = $("#name").val()
+            var message = $("#message").val();
+
+            socket.emit("message", {
+                channel : "{{channel}}",
+                name : name,
+                message : message
+            });
+
+
+        }
+
+        function readMessage(data){
+            $(".message-section").empty();
+            const messages = data.messages;
+            messages.map((data)=>{
+                $(".message-section").append(
+                    `<div>
+                        ${data.name} : ${data.message}
+                     </div>`
+                )
+            })
+        }
+        
+    </script>   
+</body>
+</html>
